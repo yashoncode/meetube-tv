@@ -91,7 +91,17 @@ public class VideoGridFragment extends GridFragment implements VideoSection {
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
+        VerticalGridPresenter presenter = isShorts() ? new CustomVerticalGridPresenter() {
+            // MEETUBE: a focused short zooms into the row below and that row showed through its glass caption,
+            // so the rows sit far enough apart for the zoomed card (caption included, about 1.4x the image height).
+            @Override
+            protected void initializeGridViewHolder(ViewHolder vh) {
+                super.initializeGridViewHolder(vh);
+                int imageHeight = GridFragmentHelper.getCardDimensPx(getContext(), R.dimen.shorts_card_width, R.dimen.shorts_card_height, mVideoGridScale).second;
+                int needed = Math.round(imageHeight * 1.4f * 0.1f + 6 * getResources().getDisplayMetrics().density);
+                vh.getGridView().setVerticalSpacing(Math.max(vh.getGridView().getVerticalSpacing(), needed));
+            }
+        } : new CustomVerticalGridPresenter();
         presenter.setNumberOfColumns(
                 GridFragmentHelper.getMaxColsNum(getContext(), isShorts() ? R.dimen.shorts_card_width : R.dimen.card_width, mVideoGridScale)
         );
