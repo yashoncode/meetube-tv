@@ -1059,6 +1059,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         // MEETUBE: the glass player's row fills the screen above leanback's bottom padding (the row is aligned by
         // its bottom edge there): the title at the top, the glass panel at the bottom
         fillHeight(v, parent);
+        scaleControls(v);
         parent.addOnLayoutChangeListener((p, l, t, r, b, ol, ot, or, ob) -> {
             if (b - t != ob - ot) {
                 fillHeight(v, parent);
@@ -1067,6 +1068,63 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         ViewHolder vh = new ViewHolder(v, mDescriptionPresenter);
         initRow(vh);
         return vh;
+    }
+
+    /** MEETUBE: chevrons at the button row's ends while buttons are hidden past them. */
+    private static void showMoreArrow(View dock) {
+        View scroller = (View) dock.getParent();
+        View row = (View) scroller.getParent();
+        View more = row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.controls_more_arrow);
+        View less = row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.controls_less_arrow);
+        if (more == null || less == null) {
+            return;
+        }
+        Runnable update = () -> {
+            showIf(more, scroller.canScrollHorizontally(1));
+            showIf(less, scroller.canScrollHorizontally(-1));
+        };
+        scroller.getViewTreeObserver().addOnScrollChangedListener(update::run);
+        scroller.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> update.run());
+        dock.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> update.run()); // buttons added or hidden
+    }
+
+    /** INVISIBLE, not GONE: the arrow keeps its slot, so no relayout is needed mid-layout (a GONE one never got a size). */
+    private static void showIf(View arrow, boolean show) {
+        int visibility = show ? View.VISIBLE : View.INVISIBLE;
+        if (arrow.getVisibility() != visibility) {
+            arrow.setVisibility(visibility);
+        }
+    }
+
+    /** MEETUBE: everything on the player but the seek bar is drawn at 90%. */
+    private static final float CONTROLS_SCALE = 0.9f;
+
+    /** Each piece shrinks toward its outer corner, so the title, clock, times and buttons stay where they were. */
+    private static void scaleControls(View row) {
+        View title = row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.controls_card);
+        scale(title, v -> v.getPaddingStart(), v -> v.getPaddingTop()); // the title's first letter
+        View info = row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
+        scale(info != null ? (View) info.getParent() : null, View::getWidth, v -> 0); // clock and quality: top right
+        View dock = row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.controls_dock);
+        scale(dock != null ? (View) dock.getParent() : null, v -> 0, v -> 0); // the buttons: from the left, under the bar
+        scale(row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.current_time), v -> 0, v -> v.getHeight() / 2);
+        scale(row.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.total_time), View::getWidth, v -> v.getHeight() / 2);
+    }
+
+    private interface Pivot {
+        int of(View view);
+    }
+
+    private static void scale(View view, Pivot x, Pivot y) {
+        if (view == null) {
+            return;
+        }
+        view.setScaleX(CONTROLS_SCALE);
+        view.setScaleY(CONTROLS_SCALE);
+        view.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
+            v.setPivotX(x.of(v));
+            v.setPivotY(y.of(v));
+        });
     }
 
     private static void fillHeight(View row, View parent) {
@@ -1089,6 +1147,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         vh.mSecondaryControlsVh = (ControlBarPresenter.ViewHolder) mSecondaryControlsPresenter
                 .onCreateViewHolder(vh.mSecondaryControlsDock);
         vh.mSecondaryControlsDock.addView(vh.mSecondaryControlsVh.view);
+        showMoreArrow(vh.mSecondaryControlsDock);
         ((PlaybackTransportRowView) vh.view.findViewById(R.id.transport_row))
                 .setOnUnhandledKeyListener(new PlaybackTransportRowView.OnUnhandledKeyListener() {
                 @Override

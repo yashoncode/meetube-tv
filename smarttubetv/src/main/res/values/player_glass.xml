@@ -5,6 +5,8 @@
     <dimen name="player_glass_padding">20dp</dimen>
     <dimen name="player_glass_padding_vertical">12dp</dimen>
     <dimen name="player_glass_title_top">24dp</dimen>
+    <!-- the clock's text starts level with the top of the title's first line (the title sits lower in its box) -->
+    <dimen name="player_glass_clock_top">32dp</dimen>
     <!-- the title stops short of the quality and clock lines at the top right -->
     <dimen name="player_glass_info_reserve">220dp</dimen>
     <dimen name="player_glass_title_scrim_height">220dp</dimen>

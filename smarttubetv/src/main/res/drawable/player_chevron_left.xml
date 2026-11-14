@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MEETUBE: shown at the button row's left end while buttons are scrolled out past it -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp" android:height="28dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF"
+        android:pathData="M15.4,16.6L10.8,12l4.6,-4.6L14,6l-6,6l6,6z" />
+</vector>

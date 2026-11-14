@@ -1103,6 +1103,10 @@ public class BrowseSupportFragment extends BaseSupportFragment {
                 return focused;
             }
             if (DEBUG) Log.v(TAG, "onFocusSearch focused " + focused + " + direction " + direction);
+            View titleLine = onTitleLineFocusSearch(focused, direction);
+            if (titleLine != null) {
+                return titleLine;
+            }
 
             if (getTitleView() != null && focused != getTitleView()
                     && direction == View.FOCUS_UP) {
@@ -1471,6 +1475,14 @@ public class BrowseSupportFragment extends BaseSupportFragment {
         lp = (MarginLayoutParams) containerList.getLayoutParams();
         lp.setMarginStart(onScreen ? 0 : -headersHiddenOffset());
         containerList.setLayoutParams(lp);
+    }
+
+    /**
+     * MEETUBE: a focus move between the title and content that sits on the title's line (Home's chips), checked
+     * before leanback's own moves. Null: leanback decides.
+     */
+    protected View onTitleLineFocusSearch(View focused, int direction) {
+        return null;
     }
 
     // MEETUBE: the rows may start before the sidebar's right edge; a closed sidebar still hides its full width.

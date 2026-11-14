@@ -50,9 +50,10 @@
     <!-- Old value: 167dp -->
     <dimen name="lb_browse_rows_margin_top">130dp</dimen>
 
-    <!-- MEETUBE: the rows start just past the sidebar glass panel. A closed sidebar hides its full width (BrowseSupportFragment.headersHiddenOffset). -->
-    <!-- Old value: 238dp -->
-    <dimen name="lb_browse_rows_margin_start">210dp</dimen>
+    <!-- MEETUBE: the rows start 16dp past the sidebar glass panel, which is drawn at 80% (BrowseGlassDecoration).
+         A closed sidebar hides its full width (BrowseSupportFragment.headersHiddenOffset). -->
+    <!-- Old values: 238dp, 210dp (the panel at full size) -->
+    <dimen name="lb_browse_rows_margin_start">164dp</dimen>
 
     <!-- Make search bar more compact so more buttons could be added after it. -->
     <dimen name="lb_search_bar_items_width">600dp</dimen>

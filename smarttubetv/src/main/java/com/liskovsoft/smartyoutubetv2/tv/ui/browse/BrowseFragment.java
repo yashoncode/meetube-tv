@@ -286,6 +286,32 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         return mGlassEnabled; // MEETUBE: Settings, Search and the account sit on the glass sidebar, always reachable
     }
 
+    /**
+     * MEETUBE: Home's chips share the top bar's line with the buttons: RIGHT from the last button moves onto them and
+     * LEFT from the first chip back to that button, like one bar. With the sidebar open the panel sits between them.
+     */
+    @Override
+    protected View onTitleLineFocusSearch(View focused, int direction) {
+        View chips = getMainFragment() instanceof MultipleRowsFragment ?
+                ((MultipleRowsFragment) getMainFragment()).getHomeChipsView() : null;
+        if (chips == null || isShowingHeaders() || getTitleView() == null) {
+            return null;
+        }
+        if (direction == View.FOCUS_RIGHT && getTitleView().hasFocus()) {
+            return chips;
+        }
+        ViewGroup orbs = getTitleView().findViewById(R.id.title_orbs);
+        if (direction == View.FOCUS_LEFT && chips.hasFocus() && orbs != null) {
+            for (int i = orbs.getChildCount() - 1; i >= 0; i--) {
+                View orb = orbs.getChildAt(i);
+                if (orb.getVisibility() == View.VISIBLE && orb.isFocusable()) {
+                    return orb;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     protected Object getMainFragmentRow(Object row) {
         return mHiddenRow != null ? mHiddenRow : row;

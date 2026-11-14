@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /** MEETUBE: compact feed selectors with their own row, without card zoom, shadows or a heading. */
 public final class HomeChipPresenter extends Presenter {
+    /** MEETUBE: the chips, their text and their track at 90% of their old size. */
+    private static final float SIZE = 0.9f;
+
     public static final class ChipRow extends ListRow {
         public ChipRow(ObjectAdapter adapter) {
             super(adapter);
@@ -37,7 +41,7 @@ public final class HomeChipPresenter extends Presenter {
             protected void initializeRowViewHolder(RowPresenter.ViewHolder holder) {
                 super.initializeRowViewHolder(holder);
                 HorizontalGridView grid = ((ListRowPresenter.ViewHolder) holder).getGridView();
-                float density = grid.getResources().getDisplayMetrics().density;
+                float density = grid.getResources().getDisplayMetrics().density * SIZE;
                 boolean segment = isSegment(grid);
                 grid.setHorizontalSpacing(segment ? 0 : Math.round(8 * density));
                 grid.setRowHeight(Math.round((segment ? 46 : 38) * density));
@@ -144,15 +148,16 @@ public final class HomeChipPresenter extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         TextView pill = new TextView(parent.getContext());
-        float density = parent.getResources().getDisplayMetrics().density;
+        float density = parent.getResources().getDisplayMetrics().density * SIZE;
         boolean segment = isSegment(parent);
         pill.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, Math.round((segment ? 46 : 38) * density)));
         pill.setBackgroundResource(segment ? R.drawable.home_segment_chip : R.drawable.home_glass_chip); // before the padding: a background resets it
         pill.setPadding(Math.round(18 * density), 0, Math.round(18 * density), 0);
         pill.setGravity(Gravity.CENTER);
-        pill.setTextSize(14);
-        pill.setSingleLine(true);
+        // whole pixels and maxLines, not singleLine: 11.2sp in a single-line (scrolling) layout cut each label's last letter
+        pill.setTextSize(TypedValue.COMPLEX_UNIT_PX, Math.round(14 * SIZE * parent.getResources().getDisplayMetrics().scaledDensity));
+        pill.setMaxLines(1);
         pill.setFocusable(true);
         pill.setFocusableInTouchMode(true);
         pill.setTag(segment);

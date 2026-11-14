@@ -1004,12 +1004,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         }
     }
 
+    /** MEETUBE: the chips after Home, in this order (not the sidebar's). */
+    private static final int[] HOME_CHIP_ORDER = {MediaGroup.TYPE_MUSIC, MediaGroup.TYPE_SPORTS, MediaGroup.TYPE_GAMING,
+            MediaGroup.TYPE_NEWS, MediaGroup.TYPE_KIDS_HOME, MediaGroup.TYPE_LIVE};
+
     private VideoGroup createHomeChips(BrowseSection home) {
         List<Video> chips = new ArrayList<>();
         chips.add(createHomeChip(home));
-        for (BrowseSection section : mSections) {
-            if (section.isEnabled() && isExploreSection(section.getId())) {
-                chips.add(createHomeChip(section));
+        for (int id : HOME_CHIP_ORDER) {
+            for (BrowseSection section : mSections) {
+                if (section.getId() == id && section.isEnabled()) {
+                    chips.add(createHomeChip(section));
+                }
             }
         }
         VideoGroup group = VideoGroup.from(chips, home);

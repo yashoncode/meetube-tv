@@ -20,6 +20,7 @@ import java.util.List;
 public class MainUIData extends DataChangeBase implements ProfileChangeListener {
     private static final String MAIN_UI_DATA = "main_ui_data2";
     public static final int CARD_PREVIEW_DISABLED = 0;
+    private static final String CARD_PREVIEW_RESET = "meetube_card_preview_reset";
     public static final int CARD_PREVIEW_MUTED = 1;
     public static final int CARD_PREVIEW_FULL = 2;
     public static final int CHANNEL_SORTING_NEW_CONTENT = 0;
@@ -470,6 +471,14 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         mIsChannelSearchBarEnabled = Helpers.parseBoolean(split, 19, true);
         mIsPinnedChannelRowsEnabled = Helpers.parseBoolean(split, 20, true);
         mCardPreviewType = Helpers.parseInt(split, 21, CARD_PREVIEW_DISABLED);
+        // MEETUBE: card previews are off; once, also on installs that had them on (Settings can turn them back on)
+        if (mPrefs.getProfileData(CARD_PREVIEW_RESET) == null) {
+            mPrefs.setProfileData(CARD_PREVIEW_RESET, "1");
+            if (mCardPreviewType != CARD_PREVIEW_DISABLED) {
+                mCardPreviewType = CARD_PREVIEW_DISABLED;
+                persistState();
+            }
+        }
         mIsUnlocalizedTitlesEnabled = Helpers.parseBoolean(split, 22, false);
         mUiTweaks = Helpers.parseLong(split, 23, UI_TWEAK_DEFAULT);
 

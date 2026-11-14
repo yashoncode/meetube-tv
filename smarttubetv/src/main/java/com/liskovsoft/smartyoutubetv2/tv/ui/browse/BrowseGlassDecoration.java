@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
@@ -14,6 +15,16 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /** Decorations are attached to browse's existing views; shared layouts and themes stay untouched. */
 final class BrowseGlassDecoration {
+    /**
+     * MEETUBE: the sidebar (its glass panel, the list and the buttons above it) is drawn at 80% as one piece, around
+     * the buttons' line, so they stay level with the clock. A view transform: the sizes inside, and the panel math
+     * below, stay in the sidebar's own unscaled units. lb_browse_rows_margin_start puts the rows next to it.
+     */
+    private static final float SIDEBAR_SCALE = 0.8f;
+    /** MEETUBE: the clock pill (and the title's other right-hand pills) at full size, held to the right edge. */
+    private static final float CLOCK_SCALE = 1f;
+    private final ViewGroup mRoot;
+    private final View mBranding;
     private final View mHeaders;
     private final View mFade;
     private final View mGrid;
@@ -37,6 +48,7 @@ final class BrowseGlassDecoration {
     private int mListPaddingRight = -1;
 
     BrowseGlassDecoration(View root, View headers) {
+        mRoot = (ViewGroup) root;
         mHeaders = headers;
         mFade = headers.findViewById(R.id.fade_out_edge);
         mGrid = headers.findViewById(R.id.browse_headers);
@@ -51,6 +63,13 @@ final class BrowseGlassDecoration {
         mTime = root.findViewById(R.id.global_time);
         mDate = root.findViewById(R.id.global_date);
         mClock = mTime != null ? (View) mTime.getParent().getParent() : null; // the pill: the heart + the clock
+        mBranding = mClock != null ? (View) mClock.getParent() : null; // the pills on the title's right end
+        if (mBranding != null) {
+            mBranding.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
+                v.setPivotX(r - l);
+                v.setPivotY((b - t) / 2f);
+            });
+        }
         mHeaderBackground = mHeaders != null ? mHeaders.getBackground() : null;
         mClockBackground = mClock != null ? mClock.getBackground() : null;
         mFadeVisibility = mFade != null ? mFade.getVisibility() : View.VISIBLE;
@@ -70,6 +89,8 @@ final class BrowseGlassDecoration {
             // an orb shown or hidden (Settings, the account avatar) resizes the row: place it again (a plain
             // relayout, e.g. the clock ticking, must not snap a running slide)
             mOrbRow.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
+                v.setPivotX(0); // scaled from its first button's edge, on its own middle line
+                v.setPivotY((b - t) / 2f);
                 if (l != ol || r != or) {
                     shiftOrbs(false);
                     updatePanel();
@@ -92,6 +113,11 @@ final class BrowseGlassDecoration {
             } else {
                 mHeaders.setBackground(mHeaderBackground);
                 restorePadding(mHeaders, mHeaderPadding);
+                ViewGroup.LayoutParams lp = mHeaders.getLayoutParams();
+                if (lp != null && lp.height != ViewGroup.LayoutParams.MATCH_PARENT) {
+                    lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mHeaders.setLayoutParams(lp);
+                }
             }
             if (mGrid != null) {
                 // MEETUBE: 20dp inside the floating card; keep Leanback's fixed top and scrolling.
@@ -110,6 +136,9 @@ final class BrowseGlassDecoration {
         if (mFade != null) {
             mFade.setVisibility(enabled ? View.GONE : mFadeVisibility);
         }
+        setScale(mHeaders, enabled ? SIDEBAR_SCALE : 1f);
+        setScale(mOrbRow, enabled ? SIDEBAR_SCALE : 1f);
+        setScale(mBranding, enabled ? CLOCK_SCALE : 1f);
         updateClock();
         if (changed) {
             shiftOrbs(false); // not on every call: browse re-applies glass per section, mid sidebar slide
@@ -128,10 +157,12 @@ final class BrowseGlassDecoration {
         View first = shownChild(mOrbRow, true);
         float target = 0;
         if (mEnabled && mSidebarShown && first != null && mOrbRow.getWidth() > 0) {
-            // MEETUBE: use the panel's insets for both the orb row and the pills.
-            int start = mOrbRow.getResources().getDimensionPixelSize(R.dimen.browse_sidebar_panel_inset) +
-                    mOrbRow.getResources().getDimensionPixelSize(R.dimen.browse_sidebar_panel_padding);
-            target = start - (mOrbRow.getLeft() + first.getLeft());
+            // MEETUBE: use the panel's insets for both the orb row and the pills; inside the panel they are scaled
+            // with it, from its left edge.
+            int margin = mOrbRow.getResources().getDimensionPixelSize(R.dimen.browse_sidebar_panel_inset);
+            float start = margin + mOrbRow.getResources().getDimensionPixelSize(R.dimen.browse_sidebar_panel_padding) *
+                    mHeaders.getScaleX();
+            target = start - (mOrbRow.getLeft() + first.getLeft() * mOrbRow.getScaleX());
         }
         if (animate) {
             mOrbRow.animate().translationX(target).setDuration(250).setInterpolator(new DecelerateInterpolator()).start();
@@ -158,6 +189,12 @@ final class BrowseGlassDecoration {
         View last = mOrbRow != null && mOrbRow.getWidth() > 0 ? shownChild(mOrbRow, false) : null;
         int rowWidth = first != null && last != null ? last.getRight() - first.getLeft() : 0;
         int right = rowWidth > 0 ? start + rowWidth : 0; // where shiftOrbs puts the row while the sidebar is open
+        if (mOrbRow != null && mOrbRow.getHeight() > 0 && mHeaders.getHeight() > 0) {
+            // SIDEBAR_SCALE's center: the panel's left edge, on the buttons' middle line
+            mHeaders.setPivotX(margin);
+            mHeaders.setPivotY(layoutTop(mOrbRow) + mOrbRow.getHeight() / 2f - layoutTop(mHeaders));
+            fitScaledHeight(margin);
+        }
         if (mGrid instanceof ViewGroup && right > 0 && mGrid.getWidth() > 0) {
             ViewGroup grid = (ViewGroup) mGrid;
             int paddingRight = Math.max(0, grid.getLeft() + grid.getWidth() - right);
@@ -186,6 +223,41 @@ final class BrowseGlassDecoration {
         mHeaders.setBackground(mPanel);
         // InsetDrawable must not move the grid or its focus targets.
         restorePadding(mHeaders, mHeaderPadding);
+    }
+
+    /**
+     * Scaled around a pivot near its top, a full-height sidebar ended at 80% of the screen. Taller by the scale's
+     * share instead, so the panel's bottom gap matches its top gap.
+     */
+    private void fitScaledHeight(int margin) {
+        View parent = (View) mHeaders.getParent();
+        if (parent == null || parent.getHeight() == 0) {
+            return;
+        }
+        float scale = mHeaders.getScaleY();
+        float pivot = mHeaders.getPivotY();
+        float topGap = mHeaders.getTop() + pivot - (pivot - margin) * scale; // the panel's top on screen
+        int height = scale == 1f ? ViewGroup.LayoutParams.MATCH_PARENT :
+                Math.round(margin + pivot + (parent.getHeight() - topGap - mHeaders.getTop() - pivot) / scale);
+        ViewGroup.LayoutParams lp = mHeaders.getLayoutParams();
+        if (lp != null && lp.height != height) {
+            lp.height = height;
+            mHeaders.setLayoutParams(lp);
+        }
+    }
+
+    /** The view's top in the browse frame, as laid out (the title's slide and the sidebar's scale left out). */
+    private int layoutTop(View view) {
+        Rect rect = new Rect();
+        mRoot.offsetDescendantRectToMyCoords(view, rect);
+        return rect.top;
+    }
+
+    private static void setScale(View view, float scale) {
+        if (view != null) {
+            view.setScaleX(scale);
+            view.setScaleY(scale);
+        }
     }
 
     /** The first or last button on show: the row also holds INVISIBLE views (they take space, draw nothing). */

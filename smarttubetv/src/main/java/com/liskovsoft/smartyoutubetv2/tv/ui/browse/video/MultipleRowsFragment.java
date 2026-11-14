@@ -1,12 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.RowsSupportFragment;
+import androidx.leanback.widget.HorizontalGridView;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
@@ -49,6 +53,8 @@ import java.util.Map;
 
 public abstract class MultipleRowsFragment extends RowsSupportFragment implements VideoSection {
     private static final String TAG = MultipleRowsFragment.class.getSimpleName();
+    /** MEETUBE: set on Home's fragment: its video cards are smaller, two more to a row. */
+    public static final String ARG_HOME = "meetube_home";
     private UriBackgroundManager mBackgroundManager;
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
@@ -68,13 +74,43 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         super.onCreate(savedInstanceState);
         
         mMainPresenter = getMainPresenter();
-        mCardPresenter = new VideoCardPresenter(BrowseGlassStyle.isBrowse(this));
+        boolean home = getArguments() != null && getArguments().getBoolean(ARG_HOME);
+        mCardPresenter = home ? new HomeCardPresenter() : new VideoCardPresenter(BrowseGlassStyle.isBrowse(this));
         mShortsPresenter = new ShortsCardPresenter(BrowseGlassStyle.isBrowse(this));
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         setupAdapter();
         setupEventListeners();
         applyPendingUpdates();
+    }
+
+    /** MEETUBE: the row width that held n cards and their gaps holds n + 1.5, 14dp apart; the text keeps its size. */
+    private static final class HomeCardPresenter extends VideoCardPresenter {
+        HomeCardPresenter() {
+            super(true);
+        }
+
+        @Override
+        protected Pair<Integer, Integer> getCardDimensPx(Context context) {
+            Pair<Integer, Integer> size = super.getCardDimensPx(context);
+            int columns = GridFragmentHelper.getMaxColsNum(context, R.dimen.card_width,
+                    MainUIData.instance(context).getVideoGridScale());
+            int gap = context.getResources().getDimensionPixelSize(R.dimen.grid_item_horizontal_spacing);
+            int width = (size.first + gap) * columns * 2 / (columns * 2 + 3) - homeGap(context);
+            return new Pair<>(width, size.second * width / size.first);
+        }
+
+        @Override
+        public Presenter.ViewHolder onCreateViewHolder(ViewGroup parent) {
+            if (parent instanceof HorizontalGridView) {
+                ((HorizontalGridView) parent).setHorizontalSpacing(homeGap(parent.getContext())); // the row the card goes in
+            }
+            return super.onCreateViewHolder(parent);
+        }
+
+        private static int homeGap(Context context) {
+            return Math.round(14 * context.getResources().getDisplayMetrics().density);
+        }
     }
 
     @Override
@@ -98,21 +134,38 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         int alignment = mRowsAlignment;
         if (hasHomeChips() && getSelectedPosition() <= 1 && getParentFragment() != null &&
                 getParentFragment().getView() != null) {
-            View title = getParentFragment().getView().findViewById(R.id.browse_title_group);
-            if (title == null || title.getHeight() == 0) {
+            ViewGroup orbs = getParentFragment().getView().findViewById(R.id.title_orbs);
+            ViewHolder chips = findRowViewHolderByPosition(0);
+            if (orbs == null || orbs.getHeight() == 0 || !(chips instanceof ListRowPresenter.ViewHolder)) {
                 return false;
             }
-            int[] titleLocation = new int[2];
+            View chipRow = ((ListRowPresenter.ViewHolder) chips).getGridView();
+            int[] orbsLocation = new int[2];
             int[] rowsLocation = new int[2];
-            title.getLocationOnScreen(titleLocation);
+            int[] chipsLocation = new int[2];
+            orbs.getLocationOnScreen(orbsLocation); // the row is scaled from its left edge, on its middle line
             getVerticalGridView().getLocationOnScreen(rowsLocation);
-            // MEETUBE: 14dp below the visible top bar, excluding its trailing layout padding.
-            alignment = titleLocation[1] - rowsLocation[1] + title.getHeight() - title.getPaddingBottom() +
-                    Math.round(14 * title.getResources().getDisplayMetrics().density);
+            chipRow.getLocationOnScreen(chipsLocation);
+            // MEETUBE: the chips sit on the top bar, level with its buttons and the clock: centred on the buttons' line.
+            int chipsHeight = chipRow.getHeight() - chipRow.getPaddingTop() - chipRow.getPaddingBottom();
+            alignment = orbsLocation[1] + Math.round(orbs.getHeight() * orbs.getScaleY() / 2) - rowsLocation[1] -
+                    chipsHeight / 2 - chipRow.getPaddingTop();
+            // and 16dp right of the last button: with the sidebar closed the buttons sit over the rows' start
+            View lastOrb = null;
+            for (int i = orbs.getChildCount() - 1; i >= 0 && lastOrb == null; i--) {
+                lastOrb = orbs.getChildAt(i).getVisibility() == View.VISIBLE ? orbs.getChildAt(i) : null;
+            }
+            float orbsRight = lastOrb != null ? orbsLocation[0] + lastOrb.getRight() * orbs.getScaleX() : 0;
+            float chipsLeft = chipsLocation[0] - chipRow.getTranslationX() + chipRow.getPaddingLeft();
+            // whole pixels: the screen location is rounded with the old shift in it, so a fractional shift came out
+            // different on every frame and the chips jittered by a pixel each time the clock redrew
+            float shift = Math.max(0, Math.round(orbsRight + 16 * chipRow.getResources().getDisplayMetrics().density - chipsLeft));
+            if (chipRow.getTranslationX() != shift) {
+                chipRow.setTranslationX(shift);
+            }
             if (getSelectedPosition() == 1) {
-                ViewHolder chips = findRowViewHolderByPosition(0);
                 ViewHolder first = findRowViewHolderByPosition(1);
-                if (!(chips instanceof ListRowPresenter.ViewHolder) || !(first instanceof ListRowPresenter.ViewHolder)) {
+                if (!(first instanceof ListRowPresenter.ViewHolder)) {
                     return false;
                 }
                 Rect bounds = new Rect();
@@ -140,6 +193,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     @Override
     protected int getLastTitleRow() {
         return hasHomeChips() ? 1 : 0; // MEETUBE: the top bar stays over the chips and the first video row
+    }
+
+    /** MEETUBE: Home's chip row while it sits on the top bar's line (the bar shows over the first two rows), else null. */
+    public View getHomeChipsView() {
+        ViewHolder chips = hasHomeChips() && getSelectedPosition() <= 1 ? findRowViewHolderByPosition(0) : null;
+        return chips instanceof ListRowPresenter.ViewHolder ? ((ListRowPresenter.ViewHolder) chips).getGridView() : null;
     }
 
     public boolean isHomeVideoReady() {

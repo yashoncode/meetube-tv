@@ -1,9 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
+import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
@@ -17,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoSection;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.ShortsGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
@@ -75,6 +78,11 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
         switch (mFragmentType) {
             case BrowseSection.TYPE_ROW:
                 fragment = new VideoRowsFragment();
+                if (header.getId() == MediaGroup.TYPE_HOME) {
+                    Bundle args = new Bundle();
+                    args.putBoolean(MultipleRowsFragment.ARG_HOME, true);
+                    fragment.setArguments(args);
+                }
                 break;
             case BrowseSection.TYPE_GRID:
                 fragment = new VideoGridFragment();

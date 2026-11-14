@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginEnd="@dimen/player_glass_margin"
-            android:layout_marginTop="@dimen/player_glass_title_top"
+            android:layout_marginTop="@dimen/player_glass_clock_top"
             android:orientation="vertical"
             android:gravity="end" >
             <RelativeLayout android:id="@+id/additional_info"
@@ -172,11 +172,21 @@
                 android:id="@+id/controls_dock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <!-- the 10dp evens the step from next to the first button here with the steps inside each group -->
+            <!-- MEETUBE: buttons scrolled out to the left: lit while the row can scroll back -->
+            <ImageView
+                android:id="@+id/controls_less_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/player_chevron_left"
+                android:alpha="0.8"
+                android:visibility="invisible"
+                android:focusable="false"
+                android:importantForAccessibility="no" />
             <HorizontalScrollView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="2dp"
                 android:layout_height="wrap_content"
                 android:fillViewport="true"
                 android:scrollbars="none"
@@ -189,6 +199,17 @@
                     android:gravity="start|center_vertical"
                     android:orientation="horizontal" />
             </HorizontalScrollView>
+            <!-- MEETUBE: more buttons to the right: its own slot after the row, lit while the row can scroll on -->
+            <ImageView
+                android:id="@+id/controls_more_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/player_chevron_right"
+                android:alpha="0.8"
+                android:visibility="invisible"
+                android:focusable="false"
+                android:importantForAccessibility="no" />
         </LinearLayout>
     </com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView>
 </LinearLayout>

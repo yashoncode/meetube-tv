@@ -9,10 +9,29 @@ Every MeeTube TV release, newest first. The phone app has its own changelog in [
 
 | Version | Released | Highlights |
 | :-- | :-- | :-- |
+| [**1.1.1**](#111) | 2026-11-14 | Its own home on GitHub, the player's clock lines up with the title |
 | [**1.1.0**](#110) | 2026-11-13 | Videos open almost at once, glowing focus, AV1, lighter on memory |
 | [**1.0.0**](#100) | 2026-11-05 | First stable: in-app updates, Shorts player, faster starts |
 | [**0.0.1** Beta](#001-beta) | 2026-11-03 | First beta |
 
+
+## 1.1.1
+
+> **Its own home**<br>
+> 📅 2026-11-14
+
+### Changed
+
+- MeeTube TV has its own home now, [yashoncode/meetube-tv](https://github.com/yashoncode/meetube-tv): updates come from there, and Feedback, Releases and Source code open it.
+- Home: bigger video cards set closer together, a bigger clock and category chips, chips in the order Home, Music, Sports, Gaming, News, Kids, LIVE.
+- Card previews on Home are off by default (turn them back on in Settings).
+- The player's controls are a little smaller (the seek bar keeps its size), with arrows showing when more buttons are hidden left or right.
+
+### Fixed
+
+- The player's clock lines up with the first line of the video title.
+- The sidebar glass reaches the bottom of the screen.
+- The category chips on Home no longer flicker.
 
 ## 1.1.0
 
