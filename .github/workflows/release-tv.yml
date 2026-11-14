@@ -1,4 +1,5 @@
 # Builds the signed MeeTube TV APKs from main.
+# - The release commit subject is exactly "MeeTube TV X.Y.Z": a tag run is titled after it.
 # - Push a tag tv-vX.Y.Z or tv-vX.Y.Z-beta on main, where X.Y.Z is versionName in smarttubetv/build.gradle and
 #   CHANGELOG.md starts with "## X.Y.Z": publishes "MeeTube TV X.Y.Z" (a -beta tag: "MeeTube TV X.Y.Z Beta",
 #   as a pre-release) with the armeabi-v7a, arm64-v8a and universal APKs. Its notes are a download table,

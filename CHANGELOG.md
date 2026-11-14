@@ -32,6 +32,7 @@ Every MeeTube TV release, newest first. The phone app has its own changelog in [
 - The player's clock lines up with the first line of the video title.
 - The sidebar glass reaches the bottom of the screen.
 - The category chips on Home no longer flicker.
+- A focused Shorts card no longer runs into the row below it.
 
 ## 1.1.0
 
