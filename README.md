@@ -138,7 +138,7 @@ Bug reports and ideas are welcome in [Issues](https://github.com/yashoncode/meet
 
 MeeTube TV has a sister app for phones and tablets: liquid glass, synced lyrics, background playback and one-tap downloads.
 
-<p align="center"><img src=".github/assets/meetube/showcase.webp" width="100%" alt="MeeTube on a phone in seven cards: Watch (no ads, real dislikes), Synced lyrics (every line, right on time), Shorts (full screen, swipe to the next), Downloads (one tap, watch offline), Search, Library and You"></p>
+<p align="center"><img src=".github/assets/meetube/phone_showcase.webp" width="100%" alt="MeeTube on a phone in seven cards: Watch (no ads, real dislikes), Synced lyrics (every line, right on time), Home (videos play as you scroll), Channels (posts, Shorts and live chat), YouTube mode (the look you know), Equalizer (tune how it sounds) and Offline (4K, smart and auto downloads)"></p>
 
 Get the APK from [MeeTube's Releases](https://github.com/yashoncode/meetube/releases/latest):
 
