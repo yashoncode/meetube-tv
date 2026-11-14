@@ -93,8 +93,8 @@ Each short plays in a rounded 9:16 card with its colors glowing around it. Up an
 <td><img src=".github/assets/meetube/tv_search.jpg" alt="Search"></td>
 <td>
 
-### Search that glows
-The edges of the screen light up when Search or voice search opens, and your words glow as you type.
+### Find it fast
+Type or say what you want. Suggestions sit in pills across the top, and the results line up in rows below.
 
 </td>
 </tr>
