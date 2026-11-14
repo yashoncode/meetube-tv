@@ -1,13 +1,13 @@
-# Builds the signed MeeTube TV APKs from this branch (tv). The phone app lives on main.
-# - Push a tag tv-vX.Y.Z or tv-vX.Y.Z-beta on tv, where X.Y.Z is versionName in smarttubetv/build.gradle and
+# Builds the signed MeeTube TV APKs from main.
+# - Push a tag tv-vX.Y.Z or tv-vX.Y.Z-beta on main, where X.Y.Z is versionName in smarttubetv/build.gradle and
 #   CHANGELOG.md starts with "## X.Y.Z": publishes "MeeTube TV X.Y.Z" (a -beta tag: "MeeTube TV X.Y.Z Beta",
 #   as a pre-release) with the armeabi-v7a, arm64-v8a and universal APKs. Its notes are a download table,
 #   then the changelog entry.
-# - A TV release is never marked Latest: the phone app's updater reads releases/latest/download/meetube.json.
-# - The TV's in-app updater reads meetube_tv.json from the tv branch (raw.githubusercontent.com), so a stable
+# - The TV's in-app updater reads meetube_tv.json from main (raw.githubusercontent.com), so a stable
 #   release commit bumps it to the new version, versionCode and tv-vX.Y.Z APK links; this run checks that.
 #   Until this run publishes the APKs a TV that checks gets a failed download and simply tries again later.
-# - Run it by hand (Actions > Release TV > Run workflow, on tv): builds and keeps the APKs as artifacts only.
+#   TVs on 1.1.0 or older read meetube_tv.json from branch tv of yashoncode/meetube: bump that copy too.
+# - Run it by hand (Actions > Release TV > Run workflow, on main): builds and keeps the APKs as artifacts only.
 # Secrets: the phone's release key (SIGNING_KEY, the .jks in base64, KEY_STORE_PASSWORD, ALIAS, KEY_PASSWORD).
 # Every TV release must use the same key or installed TVs refuse the update.
 name: Release TV
@@ -110,5 +110,4 @@ jobs:
             echo
             cat changes.md
           } > notes.md
-          # --latest=false: the phone app's updater reads releases/latest, which must stay a phone release.
-          gh release create "$TAG" dist/MeeTubeTV_*.apk --title "$title" --notes-file notes.md --target "$GITHUB_SHA" --latest=false $prerelease
+          gh release create "$TAG" dist/MeeTubeTV_*.apk --title "$title" --notes-file notes.md --target "$GITHUB_SHA" $prerelease

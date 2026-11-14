@@ -2,6 +2,6 @@
 <resources>
     <!-- MEETUBE: feedback goes to MeeTube's GitHub -->
     <string-array name="feedback">
-        <item>GitHub|https://github.com/yashoncode/meetube/issues</item>
+        <item>GitHub|https://github.com/yashoncode/meetube-tv/issues</item>
     </string-array>
 </resources>

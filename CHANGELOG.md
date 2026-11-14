@@ -2,7 +2,7 @@
 
 # MeeTube TV Changelog
 
-Every MeeTube TV release, newest first. The phone app's changelog is on the [main branch](https://github.com/yashoncode/meetube/blob/main/CHANGELOG.md).
+Every MeeTube TV release, newest first. The phone app has its own changelog in [MeeTube](https://github.com/yashoncode/meetube/blob/main/CHANGELOG.md).
 
 </div>
 
