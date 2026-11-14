@@ -1,39 +1,73 @@
-<p align="center"><img src=".github/assets/meetube/banner.webp" width="100%" alt="MeeTube TV: YouTube, reimagined for the big screen"></p>
+<div align="center">
+
+<img src=".github/assets/meetube/icon.png" width="96" alt="MeeTube TV app icon">
+
+# MeeTube TV
+
+**YouTube, made for the couch.**<br>
+A free YouTube app for Android TV, Google TV and Fire TV.<br>
+Clear glass, no ads, and videos that start the moment you press OK.
+
+[![Latest release](https://img.shields.io/github/v/release/yashoncode/meetube-tv?label=download&color=0e75b6)](https://github.com/yashoncode/meetube-tv/releases/latest)
+![Android 4.2+](https://img.shields.io/badge/Android-4.2%2B-3ddc84?logo=android&logoColor=white)
+[![License: MIT](https://img.shields.io/github/license/yashoncode/meetube-tv?color=e8743b)](LICENSE)
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/yashwynth)
+
+### [⬇ Download MeeTube TV](#install)
+
+[What's new](https://github.com/yashoncode/meetube-tv/releases/latest) · [All changes](CHANGELOG.md) · [On a phone? Get MeeTube](#meetube-for-your-phone)
+
+<img src=".github/assets/meetube/tv_home.jpg" width="49%" alt="Home with the glass sidebar open">
+<img src=".github/assets/meetube/tv_player.jpg" width="49%" alt="The player: the title at the top, the buttons in one row at the bottom">
+<img src=".github/assets/meetube/tv_shorts.jpg" width="49%" alt="A short in a rounded 9:16 card, its colors glowing around it">
+<img src=".github/assets/meetube/tv_search.jpg" width="49%" alt="Search results with suggestions on top">
+
+</div>
+
+> [!NOTE]
+> MeeTube TV is an independent, unofficial app. It is not affiliated with, endorsed by, or connected to Google or YouTube.
+
+## Install
+
+1. On your TV, download the APK for your TV from the [latest release](https://github.com/yashoncode/meetube-tv/releases/latest), with the Downloader app or any browser:
+
+| Your TV | APK |
+|:--|:--|
+| Most TVs and boxes | [MeeTubeTV_1.1.1_armeabi-v7a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_armeabi-v7a.apk) |
+| Newer 64-bit boxes (Nvidia Shield, Google TV Streamer) | [MeeTubeTV_1.1.1_arm64-v8a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_arm64-v8a.apk) |
+| Not sure | [MeeTubeTV_1.1.1_universal.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_universal.apk) |
+
+2. Open it. Android will ask you to allow installs from that app.
+3. That's it. Sign in with a code to see your subscriptions, or skip that.
+
+Updates: MeeTube TV finds its new versions and installs them. Your history and settings are kept.
+
+## New in 1.1.1
+
+A bigger, calmer Home.
+
+- **Bigger cards,** set closer together, with a bigger clock and bigger chips: Home, Music, Sports, Gaming, News, Kids and LIVE.
+- **A lighter player:** the controls are a little smaller, the seek bar keeps its size, and arrows show when more buttons are hidden.
+- **Quiet by default:** cards no longer play a preview while you rest on them. Turn it back on in Settings.
+- **Its own home:** MeeTube TV now lives at [yashoncode/meetube-tv](https://github.com/yashoncode/meetube-tv), and updates come from here.
+- **Fixes** for the sidebar glass stopping short, the chips flickering, a focused short running into the row below, and the player's clock.
+
+See every change in the [changelog](CHANGELOG.md).
 
 <p align="center">
-<a href="https://github.com/yashoncode/meetube-tv/releases/latest"><img src="https://img.shields.io/github/v/release/yashoncode/meetube-tv?style=for-the-badge&label=Release&color=0e75b6" alt="Release"></a>
-<a href="LICENSE"><img src="https://img.shields.io/github/license/yashoncode/meetube-tv?style=for-the-badge&label=License&color=e8743b" alt="License"></a>
-<a href="https://github.com/yashoncode/meetube-tv/releases"><img src="https://img.shields.io/github/downloads/yashoncode/meetube-tv/total?style=for-the-badge&label=Downloads&color=4c1" alt="Downloads"></a>
-<a href="https://buymeacoffee.com/yashwynth"><img src="https://img.shields.io/badge/Sponsor-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Sponsor"></a>
+<img src=".github/assets/meetube/tv_shorts_grid.jpg" width="49%" alt="The Shorts grid, the focused short lifted with a white ring">
+<img src=".github/assets/meetube/tv_subscriptions.jpg" width="49%" alt="Subscriptions: every channel as a round avatar">
 </p>
-
-<h3 align="center"><a href="#download">⬇ Download MeeTube TV</a></h3>
-
-<p align="center"><a href="CHANGELOG.md">What's new</a> · <a href="#meetube-for-your-phone">On a phone? Get MeeTube</a></p>
-
-<p align="center">
-<img src=".github/assets/meetube/tv_home.jpg" width="49%" alt="Home with the frosted sidebar open">
-<img src=".github/assets/meetube/tv_player.jpg" width="49%" alt="The player: the title at the top, every button in one row at the bottom">
-<img src=".github/assets/meetube/tv_shorts.jpg" width="49%" alt="A short in a rounded 9:16 card, its colours glowing on both sides">
-<img src=".github/assets/meetube/tv_search.jpg" width="49%" alt="Search with suggestions and results">
-</p>
-
-> [!IMPORTANT]
-> MeeTube TV is not affiliated with, endorsed by, or connected to YouTube or Google in any way. Use it at your own discretion.
-
-## About
-
-MeeTube TV is an aesthetic YouTube app for Android TV, Google TV and Fire TV. Every screen is made for the couch, with frosted glass, soft glows and calm motion. It's [MeeTube](https://github.com/yashoncode/meetube) for the big screen.
 
 ## What MeeTube TV does
 
 <table>
 <tr>
-<td width="50%"><img src=".github/assets/meetube/tv_home.jpg" alt="Home with the frosted sidebar open"></td>
+<td width="50%"><img src=".github/assets/meetube/tv_home.jpg" alt="Home"></td>
 <td width="50%">
 
 ### Glass, made for the couch
-A frosted sidebar floats over Home, with a focus pill that glides between its icons. Home's chips are glass too, and the card you're on gets a soft glowing ring.
+A clear glass sidebar floats over Home, and a pill glides between its icons. The card you're on lifts and gets a soft white ring.
 
 </td>
 </tr>
@@ -42,7 +76,7 @@ A frosted sidebar floats over Home, with a focus pill that glides between its ic
 <td>
 
 ### Press OK, and it plays
-Rest on a video and MeeTube TV loads it in the background, so it starts in about a second, even on a 1 GB TV. The player keeps the title at the top and every button in one row at the bottom.
+Rest on a video and MeeTube TV gets it ready, so it starts in about a second, even on a 1 GB TV. The title sits at the top and every button in one row at the bottom.
 
 </td>
 </tr>
@@ -50,8 +84,8 @@ Rest on a video and MeeTube TV loads it in the background, so it starts in about
 <td><img src=".github/assets/meetube/tv_shorts.jpg" alt="Shorts"></td>
 <td>
 
-### Shorts, made for the big screen
-Each short plays in a rounded 9:16 card with its colours glowing on both sides. Up and down move between them, and OK pauses.
+### Shorts, done right
+Each short plays in a rounded 9:16 card with its colors glowing around it. Up and down move between them, and OK pauses.
 
 </td>
 </tr>
@@ -69,7 +103,7 @@ The edges of the screen light up when Search or voice search opens, and your wor
 <td>
 
 ### Something for everyone
-Kids, Sports, Live, Gaming, News and Music sit right next to Home, one click away.
+Music, Sports, Gaming, News, Kids and LIVE sit right next to Home, one click away.
 
 </td>
 </tr>
@@ -77,8 +111,8 @@ Kids, Sports, Live, Gaming, News and Music sit right next to Home, one click awa
 <td><img src=".github/assets/meetube/tv_subscriptions.jpg" alt="Subscriptions"></td>
 <td>
 
-### Your account, if you want one
-Sign in with a code and Subscriptions shows every channel as a round avatar. Or skip it and use MeeTube TV without an account.
+### No account needed
+Watch without signing in. Or sign in with a code, and Subscriptions shows every channel as a round avatar.
 
 </td>
 </tr>
@@ -88,26 +122,17 @@ Sign in with a code and Subscriptions shows every channel as a round avatar. Or 
 
 | | |
 |---|---|
-| **No ads** | Ads are gone, and SponsorBlock asks before skipping sponsors, intros and "like and subscribe" reminders. |
-| **Real dislikes** | Return YouTube Dislike puts the real count on the dislike button, and DeArrow swaps clickbait titles and thumbnails. |
-| **AV1** | On TVs that support it, videos are about 30% smaller than VP9 for the same picture, so they start sooner and stall less. |
-| **Light on your TV** | Built for 1 GB boxes: about 50 MB less memory while a video plays, and quick to open after every update. |
-| **Updates itself** | MeeTube TV finds its new versions and installs them. |
-| **Remote, mouse or keyboard** | Made for the D-pad, and the mouse wheel scrolls the same way. |
+| **No ads** | Ads are gone, and SponsorBlock skips sponsors, intros and "like and subscribe" reminders. |
+| **Real dislikes** | Return YouTube Dislike shows the real count, and DeArrow swaps clickbait titles and thumbnails. |
+| **AV1** | On TVs that support it, videos are about 30% smaller for the same picture, so they start sooner and stall less. |
+| **Light on your TV** | Built for 1 GB boxes, and quick to open after every update. |
+| **Remote, mouse or keyboard** | Made for the D-pad, and the mouse wheel scrolls too. |
 
-## Download
+Every release is built and signed in public by [GitHub Actions](https://github.com/yashoncode/meetube-tv/actions/workflows/release-tv.yml) from this repo's source, so you can see how each APK was made.
 
-Get it from [the latest release](https://github.com/yashoncode/meetube-tv/releases/latest):
+## Help out
 
-| Your TV | File |
-|:--|:--|
-| Most TVs and boxes | [MeeTubeTV_1.1.1_armeabi-v7a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_armeabi-v7a.apk) |
-| Newer 64-bit boxes (Nvidia Shield, Google TV Streamer) | [MeeTubeTV_1.1.1_arm64-v8a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_arm64-v8a.apk) |
-| Not sure | [MeeTubeTV_1.1.1_universal.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_universal.apk) |
-
-Android 4.2 or later. What changed is in the [changelog](CHANGELOG.md). Found a bug? [Open an issue](https://github.com/yashoncode/meetube-tv/issues/new/choose).
-
-Every release is built and signed in public by [GitHub Actions](https://github.com/yashoncode/meetube-tv/actions/workflows/release-tv.yml) from this repository's source, so you can see exactly how each APK was made.
+Bug reports and ideas are welcome in [Issues](https://github.com/yashoncode/meetube-tv/issues/new/choose).
 
 ## MeeTube for your phone
 
