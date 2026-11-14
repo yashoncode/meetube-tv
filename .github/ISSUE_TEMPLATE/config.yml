@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Telegram group (international)
-    url: http://t.me/SmartTubeEN
-    about: "The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community."
-  - name: Telegram group (RU/UA)
-    url: http://t.me/SmartTubeUA
-    about: "Group for Russian and Ukrainian speakers."
+  - name: On a phone? MeeTube bugs and ideas
+    url: https://github.com/yashoncode/meetube/issues/new/choose
+    about: MeeTube for phones and tablets has its own tracker.
+  - name: Using SmartTube (not MeeTube TV)?
+    url: https://github.com/yuliskov/SmartTube/issues
+    about: MeeTube TV and SmartTube are separate apps. Please report SmartTube bugs in SmartTube's tracker.

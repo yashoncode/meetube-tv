@@ -42,6 +42,8 @@ JAVA_HOME=<jdk17> ANDROID_HOME=<sdk> ./gradlew :smarttubetv:assembleStstableRele
 - TVs on 1.1.0 or older read `raw.githubusercontent.com/yashoncode/meetube/tv/meetube_tv.json`. Until
   those have updated, each stable release also bumps that file on `legacy/tv` to the new APK links, or
   they never see the update.
+- The README's Release badge and Download table still point at tv-v1.1.0 on yashoncode/meetube; at the
+  first release from this repo, point them here (and add a Downloads badge like the phone README's).
 - The phone app's "Install on TV" and its release notes look for `tv-v` releases on yashoncode/meetube.
   Once a TV release ships only here, the phone repo has to read this repo instead (a phone change).
 
