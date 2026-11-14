@@ -19,7 +19,7 @@ Clear glass, no ads, and videos that start the moment you press OK.
 
 <img src=".github/assets/meetube/tv_home.jpg" width="49%" alt="Home with the glass sidebar open">
 <img src=".github/assets/meetube/tv_player.jpg" width="49%" alt="The player: the title at the top, the buttons in one row at the bottom">
-<img src=".github/assets/meetube/tv_shorts.jpg" width="49%" alt="A short in a rounded 9:16 card, its colors glowing around it">
+<img src=".github/assets/meetube/tv_shorts_player.jpg" width="49%" alt="A short in a rounded 9:16 card, its colors glowing around it">
 <img src=".github/assets/meetube/tv_search.jpg" width="49%" alt="Search results with suggestions on top">
 
 </div>
@@ -81,7 +81,7 @@ Rest on a video and MeeTube TV gets it ready, so it starts in about a second, ev
 </td>
 </tr>
 <tr>
-<td><img src=".github/assets/meetube/tv_shorts.jpg" alt="Shorts"></td>
+<td><img src=".github/assets/meetube/tv_shorts_player.jpg" alt="Shorts"></td>
 <td>
 
 ### Shorts, done right
