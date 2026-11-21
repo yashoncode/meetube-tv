@@ -15,6 +15,7 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
 import androidx.leanback.widget.VerticalGridView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -85,6 +86,21 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
         if (!getMainUIData().isChannelListPinned()) {
             view.getViewTreeObserver().addOnGlobalFocusChangeListener(mFoldListener);
+            VerticalGridView grid1 = getBrowseGrid1();
+            if (grid1 != null) {
+                grid1.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+                    @Override
+                    public void onChildViewAttachedToWindow(View child) {
+                        if (mCardPresenter1 instanceof ChannelCardPresenter) {
+                            ((ChannelCardPresenter) mCardPresenter1).applyTo(child);
+                        }
+                    }
+
+                    @Override
+                    public void onChildViewDetachedFromWindow(View child) {
+                    }
+                });
+            }
             // Both lists fit side by side once it folds; scrolling to the videos pushed the avatars off the edge
             View dock = view.findViewById(R.id.browse_grid_dock);
             if (dock instanceof HorizontalGridView) {
@@ -103,6 +119,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
 
     // MEETUBE(issue #4): the channel list folds to its avatars while a video has the focus and opens when the
     // focus comes back to it (left from the first column). The top bar leaves it as it is.
+    private int mListStart;
     private final ViewTreeObserver.OnGlobalFocusChangeListener mFoldListener = (oldFocus, newFocus) -> {
         VerticalGridView grid1 = getBrowseGrid1();
         VerticalGridView grid2 = getBrowseGrid2();
@@ -112,6 +129,13 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         boolean inVideos = isInside(newFocus, grid2);
         if (inVideos || isInside(newFocus, grid1)) {
             ((ChannelCardPresenter) mCardPresenter1).setCompact(inVideos, grid1);
+        }
+        // With the sidebar open the list gets its full start padding back: trimmed, its pills sat on the panel's edge.
+        boolean sidebar = getParentFragment() instanceof androidx.leanback.app.BrowseSupportFragment &&
+                ((androidx.leanback.app.BrowseSupportFragment) getParentFragment()).isShowingHeaders();
+        int start = sidebar ? mListStart : mListStart * 2 / 3;
+        if (mListStart > 0 && grid1.getPaddingLeft() != start) {
+            grid1.setPadding(start, grid1.getPaddingTop(), grid1.getPaddingRight(), grid1.getPaddingBottom());
         }
     };
 
@@ -217,7 +241,10 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         // between them for the focused card's zoom: a little off both screen edges, none at the strip's right
         // (too wide, the row slid left and the strip hit the screen edge).
         int edge = grid1.getPaddingLeft();
+        mListStart = edge;
         grid1.setPadding(edge * 2 / 3, grid1.getPaddingTop(), 0, grid1.getPaddingBottom());
+        // With no right padding the focused pill's zoom runs past the list's edge: let it draw there, not cut flat.
+        grid1.setClipChildren(false);
         grid2.setPadding(edge * 2 / 3, grid2.getPaddingTop(), grid2.getPaddingRight() - edge / 4, grid2.getPaddingBottom());
     }
 

@@ -240,7 +240,7 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         }
 
         // TODO: set value depending on card size. Current settings for small cards.
-        mMainFragmentAdapter.getFragmentHost().showTitleView(mSelectedPosition1 < 4);
+        mMainFragmentAdapter.getFragmentHost().showTitleView(mSelectedPosition1 < 4 && isList1AtTop());
 
         //if (!mGridViewHolder1.getGridView().hasPreviousViewInSameRow(mSelectedPosition1)) {
         //    mMainFragmentAdapter.getFragmentHost().showTitleView(true);
@@ -249,13 +249,26 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         //}
     }
 
+    /**
+     * MEETUBE(issue #4): the top bar only fits over the channel list while it isn't scrolled at all, else it covers
+     * the filter field or the folded avatars.
+     */
+    private boolean isList1AtTop() {
+        if (mGridViewHolder1 == null) {
+            return true;
+        }
+        VerticalGridView grid = mGridViewHolder1.getGridView();
+        RecyclerView.ViewHolder first = grid.findViewHolderForAdapterPosition(0);
+        return first != null && first.itemView.getTop() >= grid.getPaddingTop();
+    }
+
     private void showOrHideTitle2() {
         if (mGridViewHolder2 == null
                 || mGridViewHolder2.getGridView().findViewHolderForAdapterPosition(mSelectedPosition2) == null
                 || mMainFragmentAdapter.getFragmentHost() == null) {
             return;
         }
-        if (!mGridViewHolder2.getGridView().hasPreviousViewInSameRow(mSelectedPosition2)) {
+        if (isList1AtTop() && !mGridViewHolder2.getGridView().hasPreviousViewInSameRow(mSelectedPosition2)) {
             mMainFragmentAdapter.getFragmentHost().showTitleView(true);
         } else {
             mMainFragmentAdapter.getFragmentHost().showTitleView(false);
@@ -307,6 +320,8 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         super.onViewCreated(view, savedInstanceState);
         HorizontalGridView gridDock = (HorizontalGridView) view.findViewById(R.id.browse_grid_dock);
         gridDock.setAdapter(new MultiGridAdapter());
+        // MEETUBE(issue #4): the focused channel pill zooms past the list's edge; clipped there it was cut flat
+        gridDock.setClipChildren(false);
         gridDock.setOnChildSelectedListener(new OnChildSelectedListener() {
             @Override
             public void onChildSelected(ViewGroup parent, View view, int position, long id) {
@@ -411,7 +426,9 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(new FrameLayout(parent.getContext()));
+            FrameLayout holder = new FrameLayout(parent.getContext());
+            holder.setClipChildren(false); // MEETUBE(issue #4): see onViewCreated
+            return new ViewHolder(holder);
         }
 
         @Override

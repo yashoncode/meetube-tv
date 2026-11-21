@@ -52,17 +52,24 @@ public class ChannelCardPresenter extends LongClickPresenter {
         }
         mCompact = compact;
         for (int i = 0; i < grid.getChildCount(); i++) {
-            View child = grid.getChildAt(i);
-            if (child.findViewById(R.id.channel_card_wrapper) != null) {
-                applyCompact(child);
-            } else if (child instanceof ViewGroup) { // the filter field: its content goes, so its width does too
-                ViewGroup header = (ViewGroup) child;
-                for (int j = 0; j < header.getChildCount(); j++) {
-                    header.getChildAt(j).setVisibility(compact ? View.GONE : View.VISIBLE);
-                }
-            }
+            applyTo(grid.getChildAt(i));
         }
         grid.requestLayout();
+    }
+
+    /**
+     * Also for every row the list attaches: one coming back from the recycler's cache isn't bound again, so a row
+     * cached before a fold stayed full width and held the whole list wide, the avatars hidden under the videos.
+     */
+    public void applyTo(View child) {
+        if (child.findViewById(R.id.channel_card_wrapper) != null) {
+            applyCompact(child);
+        } else if (child instanceof ViewGroup) { // the filter field: its content goes, so its width does too
+            ViewGroup header = (ViewGroup) child;
+            for (int j = 0; j < header.getChildCount(); j++) {
+                header.getChildAt(j).setVisibility(mCompact ? View.GONE : View.VISIBLE);
+            }
+        }
     }
 
     private void applyCompact(View view) {
