@@ -9,11 +9,41 @@ Every MeeTube TV release, newest first. The phone app has its own changelog in [
 
 | Version | Released | Highlights |
 | :-- | :-- | :-- |
+| [**1.1.2**](#112) | 2026-11-21 | Videos start twice as fast, a foldable Subscriptions list, Arabic fixed |
 | [**1.1.1**](#111) | 2026-11-14 | Its own home on GitHub, the player's clock lines up with the title |
 | [**1.1.0**](#110) | 2026-11-13 | Videos open almost at once, glowing focus, AV1, lighter on memory |
 | [**1.0.0**](#100) | 2026-11-05 | First stable: in-app updates, Shorts player, faster starts |
 | [**0.0.1** Beta](#001-beta) | 2026-11-03 | First beta |
 
+
+## 1.1.2
+
+> **Quicker to play**<br>
+> 📅 2026-11-21 · closes #1, #4, #5
+
+### New
+
+- Subscriptions: the channel list folds down to round avatars when you move into the videos, so the videos get the whole width, and opens again when you come back to it. Settings has a switch to keep it open.
+
+### Faster
+
+- Videos start about twice as fast from a card, and about three times as fast right after you open the app.
+
+### Fixed
+
+- The sign-in QR code opens Google's own sign-in page, so signing in works where youtube.com is blocked.
+- Signing in with a code shows the code again.
+- Arabic no longer breaks the sidebar, the top bar or the player's controls.
+- Subscriptions: the focused channel is no longer cut off on its right, the list keeps clear of the open sidebar, and the top bar no longer covers the channel filter.
+- The latest playback fixes from SmartTube, up to its 32.80 (2026-11-21).
+
+### ✅ Issues resolved
+
+| Issue | What changed |
+| :-- | :-- |
+| [#1](https://github.com/yashoncode/meetube-tv/issues/1) | Arabic no longer breaks the sidebar, the top bar or the player |
+| [#4](https://github.com/yashoncode/meetube-tv/issues/4) | The Subscriptions channel list folds to avatars, with a switch to keep it open |
+| [#5](https://github.com/yashoncode/meetube-tv/issues/5) | The sign-in QR code works where youtube.com is blocked |
 
 ## 1.1.1
 

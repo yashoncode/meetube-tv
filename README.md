@@ -33,24 +33,24 @@ Clear glass, no ads, and videos that start the moment you press OK.
 
 | Your TV | APK |
 |:--|:--|
-| Most TVs and boxes | [MeeTubeTV_1.1.1_armeabi-v7a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_armeabi-v7a.apk) |
-| Newer 64-bit boxes (Nvidia Shield, Google TV Streamer) | [MeeTubeTV_1.1.1_arm64-v8a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_arm64-v8a.apk) |
-| Not sure | [MeeTubeTV_1.1.1_universal.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.1/MeeTubeTV_1.1.1_universal.apk) |
+| Most TVs and boxes | [MeeTubeTV_1.1.2_armeabi-v7a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.2/MeeTubeTV_1.1.2_armeabi-v7a.apk) |
+| Newer 64-bit boxes (Nvidia Shield, Google TV Streamer) | [MeeTubeTV_1.1.2_arm64-v8a.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.2/MeeTubeTV_1.1.2_arm64-v8a.apk) |
+| Not sure | [MeeTubeTV_1.1.2_universal.apk](https://github.com/yashoncode/meetube-tv/releases/download/tv-v1.1.2/MeeTubeTV_1.1.2_universal.apk) |
 
 2. Open it. Android will ask you to allow installs from that app.
 3. That's it. Sign in with a code to see your subscriptions, or skip that.
 
 Updates: MeeTube TV finds its new versions and installs them. Your history and settings are kept.
 
-## New in 1.1.1
+## New in 1.1.2
 
-A bigger, calmer Home.
+Quicker to play, roomier Subscriptions.
 
-- **Bigger cards,** set closer together, with a bigger clock and bigger chips: Home, Music, Sports, Gaming, News, Kids and LIVE.
-- **A lighter player:** the controls are a little smaller, the seek bar keeps its size, and arrows show when more buttons are hidden.
-- **Quiet by default:** cards no longer play a preview while you rest on them. Turn it back on in Settings.
-- **Its own home:** MeeTube TV now lives at [yashoncode/meetube-tv](https://github.com/yashoncode/meetube-tv), and updates come from here.
-- **Fixes** for the sidebar glass stopping short, the chips flickering, a focused short running into the row below, and the player's clock.
+- **Faster starts:** videos start about twice as fast from a card, and about three times as fast right after you open the app.
+- **Subscriptions folds away:** the channel list shrinks to round avatars while you browse the videos, so they get the whole width. A switch in Settings keeps it open.
+- **Sign in anywhere:** the sign-in QR code opens Google's own page, so it works where youtube.com is blocked, and the sign-in code shows again.
+- **Arabic fixed:** the sidebar, the top bar and the player's controls no longer break in Arabic.
+- **Fixes** for the Subscriptions list: the focused channel no longer gets cut off, and the list keeps clear of the sidebar and the top bar.
 
 See every change in the [changelog](CHANGELOG.md).
 
