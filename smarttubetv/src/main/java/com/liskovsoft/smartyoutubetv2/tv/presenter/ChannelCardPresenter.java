@@ -7,6 +7,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -38,6 +39,43 @@ public class ChannelCardPresenter extends LongClickPresenter {
     private int mWidth;
     private Video mSelected;
     private View mSelectedView;
+    private boolean mCompact;
+    private int mPaddingEnd = -1;
+
+    /**
+     * MEETUBE(issue #4): folded, every row is its avatar alone and the filter field hides, so the list shrinks to
+     * a strip and the videos beside it get the width. Rows bound later fold in onBindViewHolder.
+     */
+    public void setCompact(boolean compact, ViewGroup grid) {
+        if (mCompact == compact) {
+            return;
+        }
+        mCompact = compact;
+        for (int i = 0; i < grid.getChildCount(); i++) {
+            View child = grid.getChildAt(i);
+            if (child.findViewById(R.id.channel_card_wrapper) != null) {
+                applyCompact(child);
+            } else if (child instanceof ViewGroup) { // the filter field: its content goes, so its width does too
+                ViewGroup header = (ViewGroup) child;
+                for (int j = 0; j < header.getChildCount(); j++) {
+                    header.getChildAt(j).setVisibility(compact ? View.GONE : View.VISIBLE);
+                }
+            }
+        }
+        grid.requestLayout();
+    }
+
+    private void applyCompact(View view) {
+        LinearLayout wrapper = view.findViewById(R.id.channel_card_wrapper);
+        View avatar = view.findViewById(R.id.channel_image);
+        int start = wrapper.getPaddingStart();
+        int width = mCompact ? start * 2 + avatar.getLayoutParams().width : mWidth;
+        ViewUtil.setDimensions(wrapper, width, -1);
+        wrapper.setPaddingRelative(start, wrapper.getPaddingTop(), mCompact ? start : mPaddingEnd, wrapper.getPaddingBottom());
+        view.findViewById(R.id.channel_title).setVisibility(mCompact ? View.GONE : View.VISIBLE);
+        View dot = view.findViewById(R.id.channel_new_dot);
+        dot.setVisibility(!mCompact && Boolean.TRUE.equals(dot.getTag()) ? View.VISIBLE : View.GONE);
+    }
 
     /** Marks the channel whose videos are shown: faint glass while the focus is on its videos. */
     public void setSelected(@Nullable ViewHolder holder, @Nullable Video item) {
@@ -59,6 +97,9 @@ public class ChannelCardPresenter extends LongClickPresenter {
 
         @SuppressLint("InflateParams")
         View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
+        if (mPaddingEnd < 0) {
+            mPaddingEnd = container.findViewById(R.id.channel_card_wrapper).getPaddingEnd();
+        }
 
         TextView textView = container.findViewById(R.id.channel_title);
         textView.setTextColor(TEXT_COLOR);
@@ -103,7 +144,8 @@ public class ChannelCardPresenter extends LongClickPresenter {
         if (selected) {
             mSelectedView = viewHolder.view;
         }
-        viewHolder.view.findViewById(R.id.channel_new_dot).setVisibility(video.hasNewContent ? View.VISIBLE : View.GONE);
+        viewHolder.view.findViewById(R.id.channel_new_dot).setTag(video.hasNewContent);
+        applyCompact(viewHolder.view);
 
         ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
 

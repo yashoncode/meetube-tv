@@ -381,7 +381,9 @@ public class NavigateTitleView extends TitleView implements OnDataChange, Accoun
 
     private void applyPipParameters() {
         if (mExitPip != null) {
-            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.INVISIBLE;
+            // MEETUBE(issue #1): GONE, not INVISIBLE: hidden they still took ~100px of the buttons' row, unseen after the
+            // avatar left to right but in front of the buttons right to left, pushing the whole bar into the chips.
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mSearchVisibility : View.GONE;
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
 

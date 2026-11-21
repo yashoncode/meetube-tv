@@ -8,10 +8,13 @@
      Every id the presenter looks up is kept. -->
 <!-- Note: clipChildren/clipToPadding false are needed to apply shadows to child
      views with no padding of their own. Also to allow for negative margin on description. -->
+<!-- MEETUBE(issue #1): left to right in every language, like the seek bar and the buttons: mirrored (Arabic) the
+     title's room for the clock moved to the left and the title ran into the clock. Text still reads right to left. -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
     android:orientation="vertical"
     android:clipChildren="false"
     android:clipToPadding="false"

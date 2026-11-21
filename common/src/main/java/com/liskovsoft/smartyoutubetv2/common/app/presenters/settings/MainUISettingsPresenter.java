@@ -229,6 +229,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                     mRestartApp = true;
                 },
                 mMainUIData.isHomeChipPillsEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.channel_list_pinned),
+                option -> {
+                    mMainUIData.setChannelListPinned(option.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isChannelListPinned()));
         
         options.add(UiOptionItem.from(getContext().getString(R.string.time_format_24) + " " + getContext().getString(R.string.time_format),
                 option -> {

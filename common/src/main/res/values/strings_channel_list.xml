@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MEETUBE(issue #4): off, Subscriptions' channel list folds to avatars while you browse the videos -->
+    <string name="channel_list_pinned">Subscriptions: keep the channel list open</string>
+</resources>

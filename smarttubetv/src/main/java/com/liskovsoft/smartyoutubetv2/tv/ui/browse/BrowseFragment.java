@@ -113,6 +113,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        // MEETUBE(issue #1): the glass sidebar, the top bar's buttons and Home's chips are placed from the left edge;
+        // mirrored (Arabic, Hebrew...) the sidebar opened as an empty panel on the right and the chips ran under the
+        // clock. The frame stays left to right in every language; the text in it still reads right to left.
+        root.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
 
         mProgressBarManager.setRootView((ViewGroup) root);
         if (Build.VERSION.SDK_INT >= 23) { // the loader's keyframe animators need API 23

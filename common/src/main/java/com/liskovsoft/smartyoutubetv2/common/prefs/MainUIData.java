@@ -156,6 +156,17 @@ public class MainUIData extends DataChangeBase implements ProfileChangeListener 
         onDataChange();
     }
 
+    // MEETUBE: Subscriptions' channel list folds to its avatars while the videos have the focus, so the videos
+    // get the width (issue #4); on, it stays open as before.
+    public boolean isChannelListPinned() {
+        return mPrefs.getBoolean("meetube_channel_list_pinned", false);
+    }
+
+    public void setChannelListPinned(boolean pinned) {
+        mPrefs.putBoolean("meetube_channel_list_pinned", pinned);
+        onDataChange();
+    }
+
     public boolean isCardMultilineTitleEnabled() {
         return mIsCardMultilineTitleEnabled;
     }

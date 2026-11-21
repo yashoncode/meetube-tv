@@ -2,10 +2,12 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ClassPresenterSelector;
+import androidx.leanback.widget.HorizontalGridView;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
@@ -80,6 +82,46 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
         super.onViewCreated(view, savedInstanceState);
 
         removePadding();
+
+        if (!getMainUIData().isChannelListPinned()) {
+            view.getViewTreeObserver().addOnGlobalFocusChangeListener(mFoldListener);
+            // Both lists fit side by side once it folds; scrolling to the videos pushed the avatars off the edge
+            View dock = view.findViewById(R.id.browse_grid_dock);
+            if (dock instanceof HorizontalGridView) {
+                ((HorizontalGridView) dock).setScrollEnabled(false);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (getView() != null) {
+            getView().getViewTreeObserver().removeOnGlobalFocusChangeListener(mFoldListener);
+        }
+        super.onDestroyView();
+    }
+
+    // MEETUBE(issue #4): the channel list folds to its avatars while a video has the focus and opens when the
+    // focus comes back to it (left from the first column). The top bar leaves it as it is.
+    private final ViewTreeObserver.OnGlobalFocusChangeListener mFoldListener = (oldFocus, newFocus) -> {
+        VerticalGridView grid1 = getBrowseGrid1();
+        VerticalGridView grid2 = getBrowseGrid2();
+        if (grid1 == null || grid2 == null || newFocus == null || !(mCardPresenter1 instanceof ChannelCardPresenter)) {
+            return;
+        }
+        boolean inVideos = isInside(newFocus, grid2);
+        if (inVideos || isInside(newFocus, grid1)) {
+            ((ChannelCardPresenter) mCardPresenter1).setCompact(inVideos, grid1);
+        }
+    };
+
+    private static boolean isInside(View view, View parent) {
+        for (View v = view; v != null; v = v.getParent() instanceof View ? (View) v.getParent() : null) {
+            if (v == parent) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -157,19 +199,26 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
      * https://stackoverflow.com/questions/9685658/add-padding-on-view-programmatically
      */
     private void removePadding() {
-        VerticalGridView browseGrid = getBrowseGrid1();
+        VerticalGridView grid1 = getBrowseGrid1();
+        VerticalGridView grid2 = getBrowseGrid2();
 
-        if (browseGrid != null) {
-            // Don't remove padding at all. This could cause weird card zooming.
-            browseGrid.setPadding(browseGrid.getPaddingLeft(), browseGrid.getPaddingTop(), browseGrid.getPaddingRight() / 3, browseGrid.getPaddingBottom());
+        if (grid1 == null || grid2 == null) {
+            return;
         }
 
-        browseGrid = getBrowseGrid2();
-
-        if (browseGrid != null) {
-            // Don't remove padding at all. This could cause weird card zooming.
-            browseGrid.setPadding(browseGrid.getPaddingLeft() / 3, browseGrid.getPaddingTop(), browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
+        // Don't remove padding at all. This could cause weird card zooming.
+        if (getMainUIData().isChannelListPinned()) {
+            grid1.setPadding(grid1.getPaddingLeft(), grid1.getPaddingTop(), grid1.getPaddingRight() / 3, grid1.getPaddingBottom());
+            grid2.setPadding(grid2.getPaddingLeft() / 3, grid2.getPaddingTop(), grid2.getPaddingRight(), grid2.getPaddingBottom());
+            return;
         }
+
+        // MEETUBE(issue #4): folded, the avatar strip and the videos' extra column fit side by side with room
+        // between them for the focused card's zoom: a little off both screen edges, none at the strip's right
+        // (too wide, the row slid left and the strip hit the screen edge).
+        int edge = grid1.getPaddingLeft();
+        grid1.setPadding(edge * 2 / 3, grid1.getPaddingTop(), 0, grid1.getPaddingBottom());
+        grid2.setPadding(edge * 2 / 3, grid2.getPaddingTop(), grid2.getPaddingRight() - edge / 4, grid2.getPaddingBottom());
     }
 
     protected VideoGroupPresenter getMainPresenter() {
@@ -229,7 +278,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoSe
             presenter2.setShadowEnabled(false);
         }
         int maxColsNum = GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale);
-        presenter2.setNumberOfColumns(Math.max(maxColsNum, 1) - 1);
+        // MEETUBE(issue #4): folded, the channel list is a strip of avatars, so the videos get its column too
+        presenter2.setNumberOfColumns(Math.max(maxColsNum - (getMainUIData().isChannelListPinned() ? 1 : 0), 1));
 
         setGridPresenter1(presenter1);
         setGridPresenter2(presenter2);

@@ -14,7 +14,9 @@ import io.reactivex.disposables.Disposable;
 public class YTSignInPresenter extends SignInPresenter {
     private static final String TAG = YTSignInPresenter.class.getSimpleName();
     private static final String SIGN_IN_URL = "https://yt.be/activate"; // 18+, no search history
-    private static final String QR_SIGN_IN_URL = "https://youtube.com/qr/activate/";
+    // MEETUBE: the QR goes straight to Google's device page with the code filled in. youtube.com/qr/activate/<code>
+    // ends there after four redirects, and phones whose DNS blocks youtube.com never got past the first (issue #5).
+    private static final String QR_SIGN_IN_URL = "https://accounts.google.com/device?enable_delegation=1&user_code=";
     //private static final String SIGN_IN_URL = "https://youtube.com/tv/activate"; // 18+, no search history
     //private static final String SIGN_IN_URL = "https://youtube.com/activate"; // age restricted, supports search history
     @SuppressLint("StaticFieldLeak")
