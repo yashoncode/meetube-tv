@@ -46,6 +46,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
     private String mBridgePackageName;
     private final Runnable mRunBackgroundTasks = this::runBackgroundTasks;
+    // MEETUBE: warm up playback (n-function compile, TV poToken) soon after launch, not with the 10 s
+    // background tasks: otherwise the first video does it itself (~5 s on a slow TV)
+    private final Runnable mWarmUpPlayback = () -> YouTubeServiceManager.instance().warmUpCacheIfNeeded();
     private final Runnable mCheckForUpdates = this::checkForUpdates;
 
     private interface IntentProcessor {
@@ -69,6 +72,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     public static void unhold() {
         if (sInstance != null) {
             Utils.removeCallbacks(sInstance.mRunBackgroundTasks);
+            Utils.removeCallbacks(sInstance.mWarmUpPlayback);
         }
         sInstance = null;
     }
@@ -101,6 +105,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunPerInstance) {
             mRunPerInstance = true;
             Utils.postDelayed(mRunBackgroundTasks, APP_INIT_DELAY_MS);
+            Utils.postDelayed(mWarmUpPlayback, 3_000);
             initIntentChain();
         }
     }
@@ -116,7 +121,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void runBackgroundTasks() {
-        YouTubeServiceManager.instance().refreshCacheIfNeeded(); // warm up player engine
+        YouTubeServiceManager.instance().warmUpCacheIfNeeded();
         enableHistoryIfNeeded();
         Utils.updateChannels(getContext());
         GDriveBackupWorker.schedule(getContext());

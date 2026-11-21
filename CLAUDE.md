@@ -51,7 +51,7 @@ JAVA_HOME=<jdk17> ANDROID_HOME=<sdk> ./gradlew :smarttubetv:assembleStstableRele
 Beta builds come from yuliskov/SmartTube master; keep MeeTube TV current with their fixes and check for
 new ones when starting TV work. `git fetch upstream master`, then
 `git diff <last synced> upstream/master -- . ':!MediaServiceCore' ':!SharedModules' ':!README.md' ':!smarttubetv/build.gradle' | git apply -3`
-and `git reset` (apply stages). Last synced: SmartTube 32.74 (`ab04c75f`, 2026-11-12). MediaServiceCore:
+and `git reset` (apply stages). Last synced: SmartTube 32.80 (`41fbc7c6`, 2026-11-21). MediaServiceCore:
 merge `upstream/master` into its branch `tv` (at least SmartTube's pointer), push `origin tv`, bump here.
 
 ## Rules

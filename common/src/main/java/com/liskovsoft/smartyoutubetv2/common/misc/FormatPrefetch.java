@@ -2,8 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import com.liskovsoft.sharedutils.rx.RxHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeServiceManager;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * MEETUBE: once focus rests on a card, its stream info is fetched in the background.
@@ -35,7 +37,8 @@ public final class FormatPrefetch {
 
         String videoId = sWanted;
         sRunning = true;
-        RxHelper.execute(YouTubeServiceManager.instance().getMediaItemService().getFormatInfoObserve(videoId),
+        RxHelper.execute(YouTubeServiceManager.instance().getMediaItemService().getFormatInfoObserve(videoId)
+                        .observeOn(Schedulers.io()).doOnNext(ExoMediaSourceFactory::preparseSabr),
                 result -> {}, error -> done(videoId), () -> done(videoId));
     }
 

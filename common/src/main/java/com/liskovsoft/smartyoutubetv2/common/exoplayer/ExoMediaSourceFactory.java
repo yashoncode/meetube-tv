@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Pair;
 import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ext.cronet.CronetDataSourceFactory;
@@ -248,7 +249,23 @@ public class ExoMediaSourceFactory {
         return dashSource;
     }
 
+    // MEETUBE: the card prefetch parses the SABR manifest off the main thread. Every caption track times
+    // ~150 translations becomes a track, 150-450 ms on a TV that OK would otherwise wait for. Used once.
+    private static volatile Pair<MediaItemFormatInfo, SabrManifest> sPreparsedSabr;
+
+    public static void preparseSabr(MediaItemFormatInfo formatInfo) {
+        if (formatInfo != null && !formatInfo.isUnplayable() && formatInfo.containsSabrFormats()) {
+            sPreparsedSabr = new Pair<>(formatInfo, new SabrManifestParser().parse(formatInfo));
+        }
+    }
+
     private SabrManifest getSabrManifest(MediaItemFormatInfo formatInfo) {
+        Pair<MediaItemFormatInfo, SabrManifest> preparsed = sPreparsedSabr;
+        if (preparsed != null && preparsed.first == formatInfo) {
+            sPreparsedSabr = null;
+            return preparsed.second;
+        }
+
         SabrManifestParser parser = new SabrManifestParser();
         return parser.parse(formatInfo);
     }
